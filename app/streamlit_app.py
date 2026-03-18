@@ -8,12 +8,33 @@ features_path = Path("data/processed/features.csv")
 model_path = Path("models/artifacts/lgbm_model.pkl")
 
 if not features_path.exists() or not model_path.exists():
-    with st.spinner("First run: building features and training model. This takes 3-5 minutes..."):
+    with st.spinner("First run: building features and training model..."):
         import subprocess
+        import os
+        
         os.makedirs("data/processed", exist_ok=True)
         os.makedirs("models/artifacts", exist_ok=True)
-        subprocess.run([sys.executable, "features/pipeline.py"], check=True)
-        subprocess.run([sys.executable, "models/train.py"], check=True)
+        
+        # get the root directory and set up the environment
+        root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        env = os.environ.copy()
+        env["PYTHONPATH"] = root  # This tells the sub-process where to find 'config'
+        
+        # run pipeline
+        subprocess.run(
+            [sys.executable, "features/pipeline.py"], 
+            check=True, 
+            cwd=root, 
+            env=env
+        )
+        # run training
+        subprocess.run(
+            [sys.executable, "models/train.py"], 
+            check=True, 
+            cwd=root, 
+            env=env
+        )
+        
     st.success("Model ready! Reloading...")
     st.rerun()
 
