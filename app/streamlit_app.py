@@ -12,8 +12,8 @@ if not features_path.exists() or not model_path.exists():
         import subprocess
         os.makedirs("data/processed", exist_ok=True)
         os.makedirs("models/artifacts", exist_ok=True)
-        subprocess.run(["python", "features/pipeline.py"], check=True)
-        subprocess.run(["python", "models/train.py"], check=True)
+        subprocess.run([sys.executable, "features/pipeline.py"], check=True)
+        subprocess.run([sys.executable, "models/train.py"], check=True)
     st.success("Model ready! Reloading...")
     st.rerun()
 
