@@ -3,11 +3,18 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from pathlib import Path
-if not Path("models/artifacts/lgbm_model.pkl").exists():
-    import subprocess
-    with st.spinner("First run - building model (2-3 min)..."):
-        subprocess.run(["python", "features/pipeline.py"])
-        subprocess.run(["python", "models/train.py"])
+features_path = Path("data/processed/features.csv")
+model_path = Path("models/artifacts/lgbm_model.pkl")
+
+if not features_path.exists() or not model_path.exists():
+    with st.spinner("First run: building features and training model. This takes 3-5 minutes..."):
+        import subprocess
+        os.makedirs("data/processed", exist_ok=True)
+        os.makedirs("models/artifacts", exist_ok=True)
+        subprocess.run(["python", "features/pipeline.py"], check=True)
+        subprocess.run(["python", "models/train.py"], check=True)
+    st.success("Model ready! Reloading...")
+    st.rerun()
 
 import streamlit as st
 import pandas as pd
