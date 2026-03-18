@@ -3,6 +3,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from pathlib import Path
+import streamlit as st
 features_path = Path("data/processed/features.csv")
 model_path = Path("models/artifacts/lgbm_model.pkl")
 
@@ -16,7 +17,7 @@ if not features_path.exists() or not model_path.exists():
     st.success("Model ready! Reloading...")
     st.rerun()
 
-import streamlit as st
+
 import pandas as pd
 import numpy as np
 import joblib
