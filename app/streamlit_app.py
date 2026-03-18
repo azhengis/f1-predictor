@@ -19,7 +19,7 @@ import plotly.graph_objects as go
 from inference.pipeline import predict_race, FEATURE_COLS
 from config import DATA_PROCESSED
 
-st.set_page_config(page_title="F1 Race Predictor", page_icon="🏎️", layout="wide")
+st.set_page_config(page_title="F1 Race Predictor", layout="wide")
 st.title("F1 Race Prediction System")
 
 @st.cache_data
